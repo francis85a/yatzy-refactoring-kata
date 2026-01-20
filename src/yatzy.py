@@ -1,14 +1,12 @@
 class Yatzy:
 
     @staticmethod
-    def chance(d1, d2, d3, d4, d5):
-        total = 0
-        total += d1
-        total += d2
-        total += d3
-        total += d4
-        total += d5
-        return total
+    def chance(*dice):
+        return sum(dice)
+        #REFACTORIZACIÓN:
+        #smell: Lista de parámetros larga (74).
+        #antes pedíamos d1, d2, d3... uno por uno, y luego los sumaba
+        #ahora con '*dice' aceptamos todos de golpe y los sumamos directamente
 
     @staticmethod
     def yatzy(dice):
