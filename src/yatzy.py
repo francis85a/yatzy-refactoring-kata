@@ -1,6 +1,7 @@
 class Yatzy:
     def __init__(self, *dice):
         # Guardamos los dados en una lista para que el objeto tenga sus propios datos.
+        # CODE SMELL: Mysterious Name (72) / Temporary Field (80).
         self.dice = list(dice)
         # REFACTORIZACIÓN:
         # Antes se usaban nombres como d1, d2... o _5. 
@@ -10,6 +11,7 @@ class Yatzy:
     def chance(*dice):
         return sum(dice)
         # REFACTORIZACIÓN: 
+        # CODE SMELL: Long Parameter List (74).
         # Antes el código estaba "atado" a 5 argumentos. 
         # Con '*dice' aceptamos cualquier numero de dados.
 
@@ -21,81 +23,59 @@ class Yatzy:
         return 50
            
 
-    @staticmethod
-    def ones(d1, d2, d3, d4, d5):
-        sum = 0
-        if (d1 == 1):
-            sum += 1
-        if (d2 == 1):
-            sum += 1
-        if (d3 == 1):
-            sum += 1
-        if (d4 == 1):
-            sum += 1
-        if (d5 == 1):
-            sum += 1
-
-        return sum
+    # Sumas Simples: 
+    # CODE SMELL: Long Parameter List (74). Eliminamos d1, d2, d3, d4, d5.
+    # CODE SMELL: Duplicated Code (72). Antes cada función hacía lo mismo con lógica repetida
+    # REFACTOR: Usamos un bucle 'for' básico, que es lo más fácil de entender
 
     @staticmethod
-    def twos(d1, d2, d3, d4, d5):
-        sum = 0
-        if (d1 == 2):
-            sum += 2
-        if (d2 == 2):
-            sum += 2
-        if (d3 == 2):
-            sum += 2
-        if (d4 == 2):
-            sum += 2
-        if (d5 == 2):
-            sum += 2
-        return sum
+    def ones(*dice):
+        points = 0
+        for pip in dice:
+            if pip == 1:
+                points += 1
+        return points
 
     @staticmethod
-    def threes(d1, d2, d3, d4, d5):
-        s = 0
-        if (d1 == 3):
-            s += 3
-        if (d2 == 3):
-            s += 3
-        if (d3 == 3):
-            s += 3
-        if (d4 == 3):
-            s += 3
-        if (d5 == 3):
-            s += 3
-        return s
+    def twos(*dice):
+        points = 0
+        for pip in dice:
+            if pip == 2:
+                points += 2
+        return points
 
-    def __init__(self, d1=0, d2=0, d3=0, d4=0, _5=0):
-        self.dice = [0] * 5
-        self.dice[0] = d1
-        self.dice[1] = d2
-        self.dice[2] = d3
-        self.dice[3] = d4
-        self.dice[4] = _5
+    @staticmethod
+    def threes(*dice):
+        points = 0
+        for pip in dice:
+            if pip == 3:
+                points += 3
+        return points
+
 
     def fours(self):
-        sum = 0
-        for at in range(5):
-            if (self.dice[at] == 4):
-                sum += 4
-        return sum
+        points = 0
+        for pip in self.dice:
+            if pip == 4:
+                points += 4
+        return points
 
     def fives(self):
-        s = 0
-        i = 0
-        for i in range(len(self.dice)):
-            if (self.dice[i] == 5):
-                s = s + 5
-        return s
+
+        points = 0
+        for pip in self.dice:
+            if pip == 5:
+                points += 5
+        return points
 
     def sixes(self):
-        sum = 0
-        for at in range(len(self.dice)):
-            if (self.dice[at] == 6):
-                sum = sum + 6
-        return sum
+        points = 0
+        for pip in self.dice:
+            if pip == 6:
+                points += 6
+        return points
+
+#_________________________
 
     def score_pair(self, d1, d2, d3, d4, d5):
         counts = [0] * 6
