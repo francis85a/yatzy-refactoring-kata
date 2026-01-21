@@ -77,19 +77,22 @@ class Yatzy:
 
 #_________________________
 
-    def score_pair(self, d1, d2, d3, d4, d5):
-        counts = [0] * 6
-        counts[d1 - 1] += 1
-        counts[d2 - 1] += 1
-        counts[d3 - 1] += 1
-        counts[d4 - 1] += 1
-        counts[d5 - 1] += 1
-        at = 0
-        for at in range(6):
-            if (counts[6 - at - 1] == 2):
-                return (6 - at) * 2
-        return 0
+    def pair(self, *dice):
+        pair = 0
 
+        for pip in dice:
+            
+            if dice.count(pip) >= 2 and pip > pair:
+                pair = pip
+        
+        return pair * 2
+        # Recorremos todos los dados recibidos como argumentos
+        # Si el dado aparece al menos 2 veces y es mayor que el par guardado
+        # Actualizamos el par más alto encontrado
+        # Al final, devolvemos el puntaje del par más alto (valor del dado * 2)
+        # Si no se encontró ningún par, pair sigue siendo 0 → devuelve 0
+        # CODE SMELL: Long Parameter List (74), Duplicated Code (72), MYSTERIOUS NAME (72), LOOPS (79).
+        
     @staticmethod
     def two_pair(d1, d2, d3, d4, d5):
         counts = [0] * 6
