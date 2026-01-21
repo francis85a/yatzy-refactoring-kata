@@ -91,27 +91,31 @@ class Yatzy:
         # Actualizamos el par más alto encontrado
         # Al final, devolvemos el puntaje del par más alto (valor del dado * 2)
         # Si no se encontró ningún par, pair sigue siendo 0 → devuelve 0
-        # CODE SMELL: Long Parameter List (74), Duplicated Code (72), MYSTERIOUS NAME (72), LOOPS (79).
+        # CODE SMELLS: Long Parameter List (74), Duplicated Code (72), MYSTERIOUS NAME (72), LOOPS (79).
         
     @staticmethod
-    def two_pair(d1, d2, d3, d4, d5):
+    def two_pairs(*dice):
         counts = [0] * 6
-        counts[d1 - 1] += 1
-        counts[d2 - 1] += 1
-        counts[d3 - 1] += 1
-        counts[d4 - 1] += 1
-        counts[d5 - 1] += 1
-        n = 0
-        score = 0
-        for i in range(6):
-            if (counts[6 - i - 1] >= 2):
-                n = n + 1
-                score += (6 - i)
+        for pip in dice:
+            counts[pip - 1] += 1
+        
+        pairs_count = 0
+        total_points = 0
+        
+        for value in range(6, 0, -1):
+            if counts[value - 1] >= 2:
+                pairs_count += 1
+                total_points += value
+        
+        if pairs_count == 2:
+            return total_points * 2
+        return 0
 
-        if (n == 2):
-            return score * 2
-        else:
-            return 0
+    # REFACTORIZACIÓN Y CODE SMELLS:
+    # Long Parameter List (74). Se cambió (d1, d2, d3, d4, d5) por '*dice' 
+    # Duplicated Code (72). Se eliminó la asignación manual de cada dado a la lista 'counts'
+    # Mysterious Name (72). Se cambiaron las variables 'n' por 'pairs_found'
+    # Loops (79). Se simplificó el recorrido del array
 
     @staticmethod
     def four_of_a_kind(_1, _2, d3, d4, d5):
