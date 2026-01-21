@@ -1,22 +1,25 @@
 class Yatzy:
+    def __init__(self, *dice):
+        # Guardamos los dados en una lista para que el objeto tenga sus propios datos.
+        self.dice = list(dice)
+        # REFACTORIZACIÓN:
+        # Antes se usaban nombres como d1, d2... o _5. 
+        # Ahora usamos una lista, que es más fácil de recorrer.
 
     @staticmethod
     def chance(*dice):
         return sum(dice)
-        #REFACTORIZACIÓN:
-        #smell: Lista de parámetros larga (74).
-        #antes pedíamos d1, d2, d3... uno por uno, y luego los sumaba
-        #ahora con '*dice' aceptamos todos de golpe y los sumamos directamente
+        # REFACTORIZACIÓN: 
+        # Antes el código estaba "atado" a 5 argumentos. 
+        # Con '*dice' aceptamos cualquier numero de dados.
 
     @staticmethod
-    def yatzy(dice):
-        counts = [0] * (len(dice) + 1)
-        for die in dice:
-            counts[die - 1] += 1
-        for i in range(len(counts)):
-            if counts[i] == 5:
-                return 50
-        return 0
+    def yatzy(*dice):
+        for pip in dice:
+            if pip != dice[0]:
+                return 0
+        return 50
+           
 
     @staticmethod
     def ones(d1, d2, d3, d4, d5):
