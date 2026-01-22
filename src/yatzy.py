@@ -176,32 +176,40 @@ class Yatzy:
         return 0
 
     @staticmethod
-    def fullHouse(d1, d2, d3, d4, d5):
-        tallies = []
-        _2 = False
-        i = 0
-        _2_at = 0
-        _3 = False
-        _3_at = 0
+    def full_house(*dice):
+        counts = [0] * 6
+        for die in dice:
+            counts[die - 1] += 1
+            
+        has_pair = False
+        has_three = False
+        pair_value = 0
+        three_value = 0
 
-        tallies = [0] * 6
-        tallies[d1 - 1] += 1
-        tallies[d2 - 1] += 1
-        tallies[d3 - 1] += 1
-        tallies[d4 - 1] += 1
-        tallies[d5 - 1] += 1
+        for value in range(1, 7):
+            if counts[value -1] == 2:
+                has_pair = True
+                pair_value = value
+            elif counts[value -1] == 3:
+                has_three = True
+                three_value = value
 
-        for i in range(6):
-            if (tallies[i] == 2):
-                _2 = True
-                _2_at = i + 1
-
-        for i in range(6):
-            if (tallies[i] == 3):
-                _3 = True
-                _3_at = i + 1
-
-        if (_2 and _3):
-            return _2_at * 2 + _3_at * 3
-        else:
-            return 0
+        if has_pair and has_three:
+            return pair_value * 2 + three_value * 3
+        return 0
+    
+    # REFACTORIZACIÓN Y CODE SMELLS:
+    #
+    # 1. CODE SMELL: Mysterious Name (Pág. 72)
+    #    - Solución: cambiamos las variables por floats.
+    #
+    # 2. CODE SMELL: Long Parameter List (Pág. 74)
+    #    - Usamos '*dice' para recibir los dados de forma flexible.
+    #
+    # 3. CODE SMELL: Duplicated Code (Pág. 72)
+    #    - Antes había dos bucles 'for' casi idénticos para buscar el 2 y el 3.
+    #    - Solución: Lo hemos unido todo en un solo bucle que comprueba ambas cosas a la vez.
+    #
+    # 4. CODE SMELL: Dead Code / Speculative Generality (Pág. 80)
+    #    - El código original inicializaba 'tallies = []' y luego 'tallies = [0]*6'. 
+    #      La primera línea no servía para nada.
