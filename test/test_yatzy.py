@@ -66,33 +66,20 @@ def test_threes():
     assert 0 == Yatzy.threes(1, 1, 1, 1, 1)
     assert 9 == Yatzy.threes(3, 3, 3, 4, 5)
 
-# Los metodos fours, fives, sixes no son estaticos
-# Necesitamos un objeto de la clase Yatzy
-# Refactorizamos el constructor
-# Estructura de datos: una lista, ya que es mutable
-# y cada turno consta de 3 tiradas
-# Las tuplas no son mutables. Refactorizo los metodos
-# anteriores de tupla a lista <= no es necesario:
-# ya que son estaticos y no emplean un objeto Yatzy
+# Los metodos fours, fives, sixes son estáticos
+# No se requiere constructor; comprobamos la interfaz estática
 
-def test_constructor():
-    tirada = Yatzy(1, 1, 1, 1, 1)
-    for dado in tirada.dice:
-        assert 1 == dado
+def test_static_interface():
+    assert 5 == Yatzy.ones(1, 1, 1, 1, 1)
+    assert 15 == Yatzy.chance(1, 2, 3, 4, 5)
 
 
 # La refactorizacion de los metodos fours, fives y sixes
 # consiste en simplificar los algoritmos para recorrer
 # la tirada de dados y sumar los puntos.
 
-@pytest.fixture(name="tirada")
-def inyector():
-    # es el setup de unittest o de JUnit
-    tirada = Yatzy(4, 5, 6, 4, 5)
-    return tirada
-
 @pytest.mark.fours
-def test_fours(tirada):
+def test_fours():
     '''
     The player scores the sum of the dice that reads four
     '''
@@ -101,7 +88,7 @@ def test_fours(tirada):
     assert 12 == Yatzy.fours(4, 4, 4, 5, 6)
 
 @pytest.mark.fives
-def test_fives(tirada):
+def test_fives():
     '''
     The player scores the sum of the dice that reads five
     '''
@@ -110,7 +97,7 @@ def test_fives(tirada):
     assert 20 == Yatzy.fives(5, 5, 5, 5, 1)
 
 @pytest.mark.sixes
-def test_sixes(tirada):
+def test_sixes():
     '''
     The player scores the sum of the dice that reads six
     '''
@@ -160,10 +147,10 @@ def test_two_pairs():
 
 @pytest.mark.three_kind
 def test_three_of_a_kind():
-    assert 9 == Yatzy(3, 3, 3, 4, 5).three_of_a_kind()
-    assert 0 == Yatzy(3, 3, 4, 5, 6).three_of_a_kind()
-    assert 9 == Yatzy(3, 3, 3, 3, 1).three_of_a_kind()
-    assert 0 == Yatzy(1, 2, 3, 4, 5).three_of_a_kind()
+    assert 9 == Yatzy.three_of_a_kind(3, 3, 3, 4, 5)
+    assert 0 == Yatzy.three_of_a_kind(3, 3, 4, 5, 6)
+    assert 9 == Yatzy.three_of_a_kind(3, 3, 3, 3, 1)
+    assert 0 == Yatzy.three_of_a_kind(1, 2, 3, 4, 5) 
 
 # Four of a kind:
 # If there are four dice with the same number, the player
@@ -173,10 +160,10 @@ def test_three_of_a_kind():
 
 @pytest.mark.four_kind
 def test_four_of_a_kind():
-    assert 8 == Yatzy(2, 2, 2, 2, 5).four_of_a_kind()
-    assert 0 == Yatzy(2, 2, 2, 5, 5).four_of_a_kind()
-    assert 8 == Yatzy(2, 2, 2, 2, 2).four_of_a_kind()
-    assert 0 == Yatzy(1, 2, 3, 4, 5).four_of_a_kind()
+    assert 8 == Yatzy.four_of_a_kind(2, 2, 2, 2, 5)
+    assert 0 == Yatzy.four_of_a_kind(2, 2, 2, 5, 5)
+    assert 8 == Yatzy.four_of_a_kind(2, 2, 2, 2, 2)
+    assert 0 == Yatzy.four_of_a_kind(1, 2, 3, 4, 5)
 
 # Small straight:
 # When placed on "small straight", if the dice read
