@@ -1,3 +1,5 @@
+from src.pips import Pips
+
 class Yatzy:
     def __init__(self, *dice):
 
@@ -7,8 +9,6 @@ class Yatzy:
 
     # Antes se usaban nombres como d1, d2... o _5. 
     # Ahora usamos una lista, que es más fácil de recorrer.
-
-
 
     @staticmethod
     def chance(*dice):
@@ -28,48 +28,36 @@ class Yatzy:
     # Duplicated Code (72). Usamos un bucle 'for' básico para no repeitir código
 
     @staticmethod
-    def _sum_by_value(dice, value):
-        points = 0
-        for pip in dice:
-            if pip == value:
-                points += value
-        return points
-
-
-    @staticmethod
     def ones(*dice):
-        return Yatzy._sum_by_value(dice, 1)
+        return Pips._sum_by_value(dice, 1)
     
     @staticmethod
     def twos(*dice):
-        return Yatzy._sum_by_value(dice, 2)
+        return Pips._sum_by_value(dice, 2)
 
     @staticmethod
     def threes(*dice):
-        return Yatzy._sum_by_value(dice, 3)
+        return Pips._sum_by_value(dice, 3)
 
     @staticmethod
     def fours(*dice):
-        return Yatzy._sum_by_value(dice, 4)
+        return Pips._sum_by_value(dice, 4)
 
     @staticmethod
     def fives(*dice):
-        return Yatzy._sum_by_value(dice, 5)
+        return Pips._sum_by_value(dice, 5)
 
     @staticmethod
     def sixes(*dice):
-        return Yatzy._sum_by_value(dice, 6)
+        return Pips._sum_by_value(dice, 6)
 
     # para todas las sumas:
     # Duplicated Code (72): La lógica de 'ones', 'twos', etc. era idéntica.
     # Long Parameter List (74): Eliminamos (d1..d5) y usamos self.dice.
 
     def pair(*dice):
-        pair = 0
-        for pip in dice:
-            if dice.count(pip) >= 2 and pip > pair:
-                pair = pip
-        return pair * 2
+        value = Pips.find_n_of_a_kind(dice, 2)
+        return value * 2
 
     # Long Parameter List (74).
     # Duplicated Code (72): El algoritmo de conteo se repetía 
@@ -98,33 +86,20 @@ class Yatzy:
     # Mysterious Name (72): cambiamos las variables 'n' por 'pairs_found'
     # Loops (79): simplificamos el recorrido del array
 
+    def three_of_a_kind(self):
+        value = Pips.find_n_of_a_kind(self.dice, 3)
+        return value * 3
+
+    # lo mismo que en four_of_a_kind, pero buscando tríos.
+    # Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
+
     def four_of_a_kind(self):
-        counts = [0] * 6
-        for die in self.dice:
-            counts[die - 1] += 1
-        
-        for value in range(6, 0, -1):
-            if counts[value - 1] >= 4:
-                return value * 4
-                
-        return 0
+        value = Pips.find_n_of_a_kind(self.dice, 4)
+        return value * 4
 
         # Mysterious Name (72): argumentos como _1, _2 en la versión anterior.
         # Duplicated Code (72): el conteo de frecuencias se repetía.
         # Long Parameter List (74): usamos '*dice' para recibir los dados
-
-    def three_of_a_kind(self):
-        counts = [0] * 6
-        for die in self.dice:
-            counts[die - 1] += 1
-            
-        for value in range(6, 0, -1):
-            if counts[value - 1] >= 3:
-                return value * 3
-        return 0
-
-    # lo mismo que en four_of_a_kind, pero buscando tríos.
-    # Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
 
     @staticmethod
     def small_straight(*dice):
