@@ -1,14 +1,6 @@
 from src.pips import Pips
 
 class Yatzy:
-    def __init__(self, *dice):
-
-    # Guardamos los dados en una lista para que el objeto tenga sus propios datos.
-    # CODE SMELL: Mysterious Name (72) / Temporary Field (80).
-        self.dice = list(dice)
-
-    # Antes se usaban nombres como d1, d2... o _5. 
-    # Ahora usamos una lista, que es más fácil de recorrer.
 
     @staticmethod
     def chance(*dice):
@@ -55,6 +47,7 @@ class Yatzy:
     # Duplicated Code (72): La lógica de 'ones', 'twos', etc. era idéntica.
     # Long Parameter List (74): Eliminamos (d1..d5) y usamos self.dice.
 
+    @staticmethod
     def pair(*dice):
         value = Pips.find_n_of_a_kind(dice, 2)
         return value * 2
@@ -86,15 +79,17 @@ class Yatzy:
     # Mysterious Name (72): cambiamos las variables 'n' por 'pairs_found'
     # Loops (79): simplificamos el recorrido del array
 
-    def three_of_a_kind(self):
-        value = Pips.find_n_of_a_kind(self.dice, 3)
+    @staticmethod
+    def three_of_a_kind(*dice):
+        value = Pips.find_n_of_a_kind(dice, 3)
         return value * 3
 
     # lo mismo que en four_of_a_kind, pero buscando tríos.
     # Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
 
-    def four_of_a_kind(self):
-        value = Pips.find_n_of_a_kind(self.dice, 4)
+    @staticmethod
+    def four_of_a_kind(*dice):
+        value = Pips.find_n_of_a_kind(dice, 4)
         return value * 4
 
         # Mysterious Name (72): argumentos como _1, _2 en la versión anterior.
