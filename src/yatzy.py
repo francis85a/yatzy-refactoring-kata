@@ -28,57 +28,43 @@ class Yatzy:
     # Duplicated Code (72). Usamos un bucle 'for' básico para no repeitir código
 
     @staticmethod
-    def ones(*dice):
+    def _sum_by_value(dice, value):
         points = 0
         for pip in dice:
-            if pip == 1:
-                points += 1
+            if pip == value:
+                points += value
         return points
 
+
+    @staticmethod
+    def ones(*dice):
+        return Yatzy._sum_by_value(dice, 1)
+    
     @staticmethod
     def twos(*dice):
-        points = 0
-        for pip in dice:
-            if pip == 2:
-                points += 2
-        return points
+        return Yatzy._sum_by_value(dice, 2)
 
     @staticmethod
     def threes(*dice):
-        points = 0
-        for pip in dice:
-            if pip == 3:
-                points += 3
-        return points
+        return Yatzy._sum_by_value(dice, 3)
 
+    @staticmethod
+    def fours(*dice):
+        return Yatzy._sum_by_value(dice, 4)
 
-    def fours(self):
-        points = 0
-        for pip in self.dice:
-            if pip == 4:
-                points += 4
-        return points
+    @staticmethod
+    def fives(*dice):
+        return Yatzy._sum_by_value(dice, 5)
 
-    def fives(self):
-
-        points = 0
-        for pip in self.dice:
-            if pip == 5:
-                points += 5
-        return points
-
-    def sixes(self):
-        points = 0
-        for pip in self.dice:
-            if pip == 6:
-                points += 6
-        return points
+    @staticmethod
+    def sixes(*dice):
+        return Yatzy._sum_by_value(dice, 6)
 
     # para todas las sumas:
     # Duplicated Code (72): La lógica de 'ones', 'twos', etc. era idéntica.
     # Long Parameter List (74): Eliminamos (d1..d5) y usamos self.dice.
 
-    def pair(self, *dice):
+    def pair(*dice):
         pair = 0
         for pip in dice:
             if dice.count(pip) >= 2 and pip > pair:

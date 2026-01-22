@@ -96,27 +96,27 @@ def test_fours(tirada):
     '''
     The player scores the sum of the dice that reads four
     '''
-    # es necesario un objeto de tipo Yatzy ya creado
-    valor_esperado = 8
-    # No puedo testear con fixtures = inyeccion de dependencias
-    # los metodos estaticos como chance()
-    assert valor_esperado == tirada.fours()
+    assert 0 == Yatzy.fours(1, 2, 3, 5, 5)
+    assert 8 == Yatzy.fours(4, 4, 1, 2, 3)
+    assert 12 == Yatzy.fours(4, 4, 4, 5, 6)
 
 @pytest.mark.fives
 def test_fives(tirada):
     '''
     The player scores the sum of the dice that reads five
     '''
-    valor_esperado = 10
-    assert valor_esperado == tirada.fives()
+    assert 0 == Yatzy.fives(1, 2, 3, 4, 6)    
+    assert 10 == Yatzy.fives(5, 5, 1, 2, 3)
+    assert 20 == Yatzy.fives(5, 5, 5, 5, 1)
 
 @pytest.mark.sixes
 def test_sixes(tirada):
     '''
     The player scores the sum of the dice that reads six
     '''
-    valor_esperado = 6
-    assert valor_esperado == tirada.sixes()
+    assert 0 == Yatzy.sixes(1, 2, 3, 4, 5)
+    assert 6 == Yatzy.sixes(6, 1, 2, 3, 4)
+    assert 18 == Yatzy.sixes(6, 6, 6, 1, 2)
 
 @pytest.mark.pair
 def test_pair():

@@ -23,7 +23,13 @@ class Pips(Enum):
         return set(cls.values()) - { pip.value }
 
 
-
+    @classmethod
+    def get_counts(cls, dice):
+        """Devuelve una lista con la frecuencia de cada cara (1-6)."""
+        counts = [0] * 6
+        for die in dice:
+            counts[die - 1] += 1
+        return counts
 
 if __name__ == "__main__":
 
