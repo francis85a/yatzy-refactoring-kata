@@ -22,7 +22,16 @@ class Pips(Enum):
     def minus(cls, pip):
         return set(cls.values()) - { pip.value }
 
+    ###########
 
+    @staticmethod
+    def _sum_by_value(dice, value):
+        points = 0
+        for pip in dice:
+            if pip == value:
+                points += value
+        return points
+        
     @classmethod
     def get_counts(cls, dice):
         """Devuelve una lista con la frecuencia de cada cara (1-6)."""
@@ -30,6 +39,19 @@ class Pips(Enum):
         for die in dice:
             counts[die - 1] += 1
         return counts
+
+    @classmethod
+    def find_n_of_a_kind(cls, dice, n):
+        """
+        Busca el valor de dado más alto que aparece al menos 'n' veces.
+        Retorna el valor del dado (1-6) o 0 si no se encuentra.
+        """
+        counts = cls.get_counts(dice)
+        for value in cls.reversedValues():
+            if counts[value - 1] >= n:
+                return value
+        return 0
+
 
 if __name__ == "__main__":
 
