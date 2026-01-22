@@ -75,8 +75,6 @@ class Yatzy:
                 points += 6
         return points
 
-#_________________________
-
     def pair(self, *dice):
         pair = 0
 
@@ -136,18 +134,19 @@ class Yatzy:
     # El 'return 0' al final es necesario para los casos donde no existan 4
     #CODE SMELL: Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
 
-    @staticmethod
-    def three_of_a_kind(d1, d2, d3, d4, d5):
-        t = [0] * 6
-        t[d1 - 1] += 1
-        t[d2 - 1] += 1
-        t[d3 - 1] += 1
-        t[d4 - 1] += 1
-        t[d5 - 1] += 1
-        for i in range(6):
-            if (t[i] >= 3):
-                return (i + 1) * 3
+    def three_of_a_kind(self):
+        counts = [0] * 6
+        for die in self.dice:
+            counts[die - 1] += 1
+            
+        for value in range(6, 0, -1):
+            if counts[value - 1] >= 3:
+                return value * 3
         return 0
+
+    # REFACTORIZACIÓN Y CODE SMELLS:
+    # lo mismo que en four_of_a_kind, pero buscando tríos.
+    #CODE SMELL: Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
 
     @staticmethod
     def smallStraight(d1, d2, d3, d4, d5):

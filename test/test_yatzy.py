@@ -160,10 +160,10 @@ def test_two_pairs():
 
 @pytest.mark.three_kind
 def test_three_of_a_kind():
-    assert 9 == Yatzy.three_of_a_kind(3, 3, 3, 4, 5)
-    assert 0 == Yatzy.three_of_a_kind(3, 3, 4, 5, 6)
-    assert 9 == Yatzy.three_of_a_kind(3, 3, 3, 3, 1)
-    assert 0 == Yatzy.three_of_a_kind(1, 2, 3, 4, 5)
+    assert 9 == Yatzy(3, 3, 3, 4, 5).three_of_a_kind()
+    assert 0 == Yatzy(3, 3, 4, 5, 6).three_of_a_kind()
+    assert 9 == Yatzy(3, 3, 3, 3, 1).three_of_a_kind()
+    assert 0 == Yatzy(1, 2, 3, 4, 5).three_of_a_kind()
 
 # Four of a kind:
 # If there are four dice with the same number, the player
