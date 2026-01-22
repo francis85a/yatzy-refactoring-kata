@@ -149,20 +149,25 @@ class Yatzy:
     #CODE SMELL: Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
 
     @staticmethod
-    def smallStraight(d1, d2, d3, d4, d5):
-        tallies = [0] * 6
-        tallies[d1 - 1] += 1
-        tallies[d2 - 1] += 1
-        tallies[d3 - 1] += 1
-        tallies[d4 - 1] += 1
-        tallies[d5 - 1] += 1
-        if (tallies[0] == 1 and
-                tallies[1] == 1 and
-                tallies[2] == 1 and
-                tallies[3] == 1 and
-                tallies[4] == 1):
+    def small_straight(*dice):
+        sorted_dice = sorted(dice)
+        
+        if sorted_dice == [1, 2, 3, 4, 5]:
             return 15
+        
         return 0
+
+    # REFACTORIZACIÓN Y CODE SMELLS:
+    #
+    # 1. CODE SMELL: Long Parameter List (Pág. 74)
+    # 2. CODE SMELL: Long Function / Complexity (Pág. 73)
+    #    - Ahora: Solo ordenamos la lista con 'sorted()' y comparamos.
+    #
+    # 3. CODE SMELL: Duplicated Code (Pág. 72)
+    #    - Se eliminó toda la repetición de 'tallies[d1-1] += 1', 'tallies[d2-1] += 1'...
+    #
+    # 4. CODE SMELL: Mysterious Name (Pág. 72)
+    #    - Cambiamos 'tallies' por 'sorted_dice'.
 
     @staticmethod
     def largeStraight(d1, d2, d3, d4, d5):
