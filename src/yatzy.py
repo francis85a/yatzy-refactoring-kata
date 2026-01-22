@@ -117,18 +117,24 @@ class Yatzy:
     # Mysterious Name (72). Se cambiaron las variables 'n' por 'pairs_found'
     # Loops (79). Se simplificó el recorrido del array
 
-    @staticmethod
-    def four_of_a_kind(_1, _2, d3, d4, d5):
-        tallies = [0] * 6
-        tallies[_1 - 1] += 1
-        tallies[_2 - 1] += 1
-        tallies[d3 - 1] += 1
-        tallies[d4 - 1] += 1
-        tallies[d5 - 1] += 1
-        for i in range(6):
-            if (tallies[i] >= 4):
-                return (i + 1) * 4
+    def four_of_a_kind(self):
+        counts = [0] * 6
+        for die in self.dice:
+            counts[die - 1] += 1
+        
+        for value in range(6, 0, -1):
+            if counts[value - 1] >= 4:
+                return value * 4
+                
         return 0
+
+    # REFACTORIZACIÓN Y CODE SMELLS:
+    # Se usa un bucle 'for' para recorrer 'self.dice'. No importa si hay 5 dados o 10, el código funcionará igual sin repetir líneas.
+    # Se cambiaron por 'counts' (conteo), 'die' (dado) y 'value' (valor del dado).
+    # 'range(6, 0, -1)' permite ir directamente del valor 6 al 1.
+    # Es mucho más intuitivo porque revisamos si tenemos cuatro "seises", luego cuatro "cincos", y así sucesivamente.
+    # El 'return 0' al final es necesario para los casos donde no existan 4
+    #CODE SMELL: Long Parameter List (74), Mysterious Name (72), Loops (79). Duplicated Code (72).
 
     @staticmethod
     def three_of_a_kind(d1, d2, d3, d4, d5):
