@@ -158,31 +158,21 @@ class Yatzy:
         return 0
 
     # REFACTORIZACIÓN Y CODE SMELLS:
-    #
-    # 1. CODE SMELL: Long Parameter List (Pág. 74)
-    # 2. CODE SMELL: Long Function / Complexity (Pág. 73)
-    #    - Ahora: Solo ordenamos la lista con 'sorted()' y comparamos.
-    #
-    # 3. CODE SMELL: Duplicated Code (Pág. 72)
-    #    - Se eliminó toda la repetición de 'tallies[d1-1] += 1', 'tallies[d2-1] += 1'...
-    #
-    # 4. CODE SMELL: Mysterious Name (Pág. 72)
-    #    - Cambiamos 'tallies' por 'sorted_dice'.
+    # CODE SMELL: Long Parameter List (Pág. 74)
+    # CODE SMELL: Long Function / Complexity (Pág. 73)
+    # Solo ordenamos la lista con 'sorted()' y comparamos.
+    # CODE SMELL: Duplicated Code (Pág. 72)
+    # Se eliminó toda la repetición de 'tallies[d1-1] += 1', 'tallies[d2-1] += 1'...
+    # CODE SMELL: Mysterious Name (Pág. 72)
+    # Cambiamos 'tallies' por 'sorted_dice'.
 
     @staticmethod
-    def largeStraight(d1, d2, d3, d4, d5):
-        tallies = [0] * 6
-        tallies[d1 - 1] += 1
-        tallies[d2 - 1] += 1
-        tallies[d3 - 1] += 1
-        tallies[d4 - 1] += 1
-        tallies[d5 - 1] += 1
-        if (tallies[1] == 1 and
-                tallies[2] == 1 and
-                tallies[3] == 1 and
-                tallies[4] == 1
-                and tallies[5] == 1):
+    def large_straight(*dice):
+        sorted_dice = sorted(dice)
+        
+        if sorted_dice == [2, 3, 4, 5, 6]:
             return 20
+        
         return 0
 
     @staticmethod
