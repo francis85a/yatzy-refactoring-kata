@@ -1,15 +1,6 @@
 import pytest
-from enum import IntEnum
 from src.yatzy import Yatzy
-
-
-class Pip(IntEnum):
-    ONE = 1
-    TWO = 2
-    THREE = 3
-    FOUR = 4
-    FIVE = 5
-    SIX = 6
+from src.pips import Pips as Pip
 
 
 @pytest.mark.chance
@@ -19,7 +10,7 @@ class Pip(IntEnum):
     ((Pip.FOUR, Pip.FIVE, Pip.FIVE, Pip.SIX, Pip.ONE), 21),
 ])
 def test_chance(dice, expected):
-    assert expected == Yatzy.chance(*dice)
+    assert expected == Yatzy.chance(*(d.value for d in dice))
 
 
 @pytest.mark.yatzy
@@ -28,7 +19,7 @@ def test_chance(dice, expected):
     ((Pip.ONE, Pip.ONE, Pip.ONE, Pip.TWO, Pip.ONE), 0),
 ])
 def test_yatzy(dice, expected):
-    assert expected == Yatzy.yatzy(*dice)
+    assert expected == Yatzy.yatzy(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("func,dice,expected", [
@@ -40,12 +31,12 @@ def test_yatzy(dice, expected):
     (Yatzy.threes, (Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FIVE), 9),
 ])
 def test_number_categories(func, dice, expected):
-    assert expected == func(*dice)
+    assert expected == func(*(d.value for d in dice))
 
 
 def test_static_interface():
-    assert 5 == Yatzy.ones(*(Pip.ONE,)*5)
-    assert 15 == Yatzy.chance(Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE)
+    assert 5 == Yatzy.ones(*(Pip.ONE.value,)*5)
+    assert 15 == Yatzy.chance(Pip.ONE.value, Pip.TWO.value, Pip.THREE.value, Pip.FOUR.value, Pip.FIVE.value)
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -54,7 +45,7 @@ def test_static_interface():
     ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FIVE, Pip.SIX), 12),
 ])
 def test_fours(dice, expected):
-    assert expected == Yatzy.fours(*dice)
+    assert expected == Yatzy.fours(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -63,7 +54,7 @@ def test_fours(dice, expected):
     ((Pip.FIVE, Pip.FIVE, Pip.FIVE, Pip.FIVE, Pip.ONE), 20),
 ])
 def test_fives(dice, expected):
-    assert expected == Yatzy.fives(*dice)
+    assert expected == Yatzy.fives(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -72,7 +63,7 @@ def test_fives(dice, expected):
     ((Pip.SIX, Pip.SIX, Pip.SIX, Pip.ONE, Pip.TWO), 18),
 ])
 def test_sixes(dice, expected):
-    assert expected == Yatzy.sixes(*dice)
+    assert expected == Yatzy.sixes(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -83,7 +74,7 @@ def test_sixes(dice, expected):
     ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
 ])
 def test_pair(dice, expected):
-    assert expected == Yatzy.pair(*dice)
+    assert expected == Yatzy.pair(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -94,7 +85,7 @@ def test_pair(dice, expected):
     ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FIVE), 0),
 ])
 def test_two_pairs(dice, expected):
-    assert expected == Yatzy.two_pairs(*dice)
+    assert expected == Yatzy.two_pairs(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -104,7 +95,7 @@ def test_two_pairs(dice, expected):
     ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
 ])
 def test_three_of_a_kind(dice, expected):
-    assert expected == Yatzy.three_of_a_kind(*dice)
+    assert expected == Yatzy.three_of_a_kind(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -114,7 +105,7 @@ def test_three_of_a_kind(dice, expected):
     ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
 ])
 def test_four_of_a_kind(dice, expected):
-    assert expected == Yatzy.four_of_a_kind(*dice)
+    assert expected == Yatzy.four_of_a_kind(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -125,7 +116,7 @@ def test_four_of_a_kind(dice, expected):
     ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.SIX), 0),
 ])
 def test_small_straight(dice, expected):
-    assert expected == Yatzy.small_straight(*dice)
+    assert expected == Yatzy.small_straight(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -136,7 +127,7 @@ def test_small_straight(dice, expected):
     ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.SIX), 0),
 ])
 def test_large_straight(dice, expected):
-    assert expected == Yatzy.large_straight(*dice)
+    assert expected == Yatzy.large_straight(*(d.value for d in dice))
 
 
 @pytest.mark.parametrize("dice,expected", [
@@ -146,4 +137,4 @@ def test_large_straight(dice, expected):
     ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.ONE, Pip.TWO), 0),
 ])
 def test_full_house(dice, expected):
-    assert expected == Yatzy.full_house(*dice)
+    assert expected == Yatzy.full_house(*(d.value for d in dice))
