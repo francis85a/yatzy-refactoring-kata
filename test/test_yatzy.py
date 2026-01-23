@@ -1,211 +1,149 @@
 import pytest
+from enum import IntEnum
 from src.yatzy import Yatzy
 
+
+class Pip(IntEnum):
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+
+
 @pytest.mark.chance
-def test_chance():
-    '''
-    Chance
-    The player scores the sum of all dice, no matter what they read.
-    '''
-    # iterar sobre *args evita codigo cableado a 5 argumentos
-    assert 15 == Yatzy.chance(1, 2, 3, 4, 5)
-    assert 14 == Yatzy.chance(1, 1, 3, 3, 6)
-    assert 21 == Yatzy.chance(4, 5, 5, 6, 1)
+@pytest.mark.parametrize("dice, expected", [
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 15),
+    ((Pip.ONE, Pip.ONE, Pip.THREE, Pip.THREE, Pip.SIX), 14),
+    ((Pip.FOUR, Pip.FIVE, Pip.FIVE, Pip.SIX, Pip.ONE), 21),
+])
+def test_chance(dice, expected):
+    assert expected == Yatzy.chance(*dice)
+
 
 @pytest.mark.yatzy
-def test_yatzy():
-    '''
-    Yatzy
-    If all dice have the same number, the player scores 50 points.
-    '''
-    # dice significa "dados" pero exige un unico argumento
-    # => interfaz abstraccion del metodo no es coherente
-    # con el resto de metodos
-    # El codigo para iterar sobre dice es muy complejo
-    # El algoritmo para averiguar si todos los dados son iguales
-    # es muy complejo
-    assert 50 == Yatzy.yatzy(1, 1, 1, 1, 1)
-    assert 0 == Yatzy.yatzy(1, 1, 1, 2, 1)
+@pytest.mark.parametrize("dice, expected", [
+    ((Pip.ONE, Pip.ONE, Pip.ONE, Pip.ONE, Pip.ONE), 50),
+    ((Pip.ONE, Pip.ONE, Pip.ONE, Pip.TWO, Pip.ONE), 0),
+])
+def test_yatzy(dice, expected):
+    assert expected == Yatzy.yatzy(*dice)
 
 
-# Ones, Twos, Threes, Fours, Fives, Sixes:
-# The player scores the sum of the dice that reads one,
-# two, three, four, five or six, respectively.
+@pytest.mark.parametrize("func,dice,expected", [
+    (Yatzy.ones, (Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+    (Yatzy.ones, (Pip.ONE, Pip.ONE, Pip.ONE, Pip.ONE, Pip.ONE), 5),
+    (Yatzy.twos, (Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+    (Yatzy.twos, (Pip.TWO, Pip.THREE, Pip.TWO, Pip.FIVE, Pip.ONE), 4),
+    (Yatzy.threes, (Pip.ONE, Pip.ONE, Pip.ONE, Pip.ONE, Pip.ONE), 0),
+    (Yatzy.threes, (Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FIVE), 9),
+])
+def test_number_categories(func, dice, expected):
+    assert expected == func(*dice)
 
-# Los metodos ones, twos, threes tienes codigo muy parecido:
-# solo se diferencian en el numero que suman al total
-# que es el numero de la categoria.
-# Refactorizamos primero ones y luego exportamos
-# la solucion a los demas.
-# (mantener pasos pequenhos en la refactorizacion)
-#
-# Los algoritmos para iterar sobre la tirada de dados
-# son muy complejos.
-
-@pytest.mark.ones
-def test_ones():
-    '''
-    The player scores the sum of the dice that reads one
-    '''
-    assert 0 == Yatzy.ones(3, 3, 3, 4, 5)
-    assert 5 == Yatzy.ones(1, 1, 1, 1, 1)
-
-@pytest.mark.twos
-def test_twos():
-    '''
-    The player scores the sum of the dice that reads two
-    '''
-    assert 0 == Yatzy.twos(3, 3, 3, 4, 5)
-    assert 4 == Yatzy.twos(2, 3, 2, 5, 1)
-
-@pytest.mark.threes
-def test_threes():
-    '''
-    The player scores the sum of the dice that reads three
-    '''
-    assert 0 == Yatzy.threes(1, 1, 1, 1, 1)
-    assert 9 == Yatzy.threes(3, 3, 3, 4, 5)
-
-# Los metodos fours, fives, sixes son estáticos
-# No se requiere constructor; comprobamos la interfaz estática
 
 def test_static_interface():
-    assert 5 == Yatzy.ones(1, 1, 1, 1, 1)
-    assert 15 == Yatzy.chance(1, 2, 3, 4, 5)
+    assert 5 == Yatzy.ones(*(Pip.ONE,)*5)
+    assert 15 == Yatzy.chance(Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE)
 
 
-# La refactorizacion de los metodos fours, fives y sixes
-# consiste en simplificar los algoritmos para recorrer
-# la tirada de dados y sumar los puntos.
-
-@pytest.mark.fours
-def test_fours():
-    '''
-    The player scores the sum of the dice that reads four
-    '''
-    assert 0 == Yatzy.fours(1, 2, 3, 5, 5)
-    assert 8 == Yatzy.fours(4, 4, 1, 2, 3)
-    assert 12 == Yatzy.fours(4, 4, 4, 5, 6)
-
-@pytest.mark.fives
-def test_fives():
-    '''
-    The player scores the sum of the dice that reads five
-    '''
-    assert 0 == Yatzy.fives(1, 2, 3, 4, 6)    
-    assert 10 == Yatzy.fives(5, 5, 1, 2, 3)
-    assert 20 == Yatzy.fives(5, 5, 5, 5, 1)
-
-@pytest.mark.sixes
-def test_sixes():
-    '''
-    The player scores the sum of the dice that reads six
-    '''
-    assert 0 == Yatzy.sixes(1, 2, 3, 4, 5)
-    assert 6 == Yatzy.sixes(6, 1, 2, 3, 4)
-    assert 18 == Yatzy.sixes(6, 6, 6, 1, 2)
-
-@pytest.mark.pair
-def test_pair():
-    '''
-    Pair:
-    The player scores the sum of the two highest matching dice.
-    '''
-    # El algoritmo del metodo no es optimo, es complicado e ilegible.
-    # La abstraccion, el nombre del metodo, no es adecuada
-    # puesto que la categoria se llama pair.
-    assert 8 == Yatzy.pair(3, 3, 3, 4, 4)
-    assert 12 == Yatzy.pair(1, 1, 6, 2, 6)
-    assert 6 == Yatzy.pair(3, 3, 3, 4, 1)
-    assert 6 == Yatzy.pair(3, 3, 3, 3, 1)
-    assert 0 == Yatzy.pair(1, 2, 3, 4, 5)
-
-@pytest.mark.pairs
-def test_two_pairs():
-    '''
-    Two pairs:
-    If there are two pairs of dice with the same number, the
-    player scores the sum of these dice.
-    '''
-    # La categoria se llama "two pairs": la abstraccion del metodo
-    # no es adecuada.
-    # Mantengo notacion snake_case
-    # El algoritmo del metodo no es optimo, es complicado e ilegible.
-
-    assert 8 == Yatzy.two_pairs(1, 1, 2, 3, 3)
-    assert 0 == Yatzy.two_pairs(1, 1, 2, 3, 4)
-    assert 6 == Yatzy.two_pairs(1, 1, 2, 2, 2)
-    assert 0 == Yatzy.two_pairs(1, 2, 3, 4, 5)
-    assert 0 == Yatzy.two_pairs(4, 4, 4, 4, 5)
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FIVE, Pip.FIVE), 0),
+    ((Pip.FOUR, Pip.FOUR, Pip.ONE, Pip.TWO, Pip.THREE), 8),
+    ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FIVE, Pip.SIX), 12),
+])
+def test_fours(dice, expected):
+    assert expected == Yatzy.fours(*dice)
 
 
-# Three of a kind:
-# If there are three dice with the same number, the player
-# scores the sum of these dice.
-#
-# El algoritmo del metodo no es optimo, es complicado e ilegible.
-
-@pytest.mark.three_kind
-def test_three_of_a_kind():
-    assert 9 == Yatzy.three_of_a_kind(3, 3, 3, 4, 5)
-    assert 0 == Yatzy.three_of_a_kind(3, 3, 4, 5, 6)
-    assert 9 == Yatzy.three_of_a_kind(3, 3, 3, 3, 1)
-    assert 0 == Yatzy.three_of_a_kind(1, 2, 3, 4, 5) 
-
-# Four of a kind:
-# If there are four dice with the same number, the player
-# scores the sum of these dice.
-#
-# El algoritmo del metodo no es optimo, es complicado e ilegible.
-
-@pytest.mark.four_kind
-def test_four_of_a_kind():
-    assert 8 == Yatzy.four_of_a_kind(2, 2, 2, 2, 5)
-    assert 0 == Yatzy.four_of_a_kind(2, 2, 2, 5, 5)
-    assert 8 == Yatzy.four_of_a_kind(2, 2, 2, 2, 2)
-    assert 0 == Yatzy.four_of_a_kind(1, 2, 3, 4, 5)
-
-# Small straight:
-# When placed on "small straight", if the dice read
-#   1,2,3,4,5,
-# the player scores 15 (the sum of all the dice).
-#
-# El nombre del metodo no es consistente con la nomenclatura snake_case
-# El algoritmo es complicado e ineficiente.
-
-@pytest.mark.small
-def test_small_straight():
-    assert 15 == Yatzy.small_straight(1, 2, 3, 4, 5)
-    assert 0 == Yatzy.small_straight(2, 3, 4, 5, 6)
-    assert 0 == Yatzy.small_straight(1, 3, 4, 5, 5)
-    assert 0 == Yatzy.small_straight(6, 6, 6, 6, 6)
-    assert 0 == Yatzy.small_straight(1, 2, 3, 4, 6)
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.SIX), 0),
+    ((Pip.FIVE, Pip.FIVE, Pip.ONE, Pip.TWO, Pip.THREE), 10),
+    ((Pip.FIVE, Pip.FIVE, Pip.FIVE, Pip.FIVE, Pip.ONE), 20),
+])
+def test_fives(dice, expected):
+    assert expected == Yatzy.fives(*dice)
 
 
-# Large straight:
-# When placed on "large straight", if the dice read
-#   2,3,4,5,6
-# the player scores 20 (the sum of all the dice).
-#
-# El nombre del metodo no es consistente con la nomenclatura snake_case
-# El algoritmo es complicado e ineficiente.
-
-@pytest.mark.large
-def test_large_straight():
-    assert 20 == Yatzy.large_straight(2, 3, 4, 5, 6)
-    assert 0 == Yatzy.large_straight(1, 2, 3, 4, 5)
-    assert 0 == Yatzy.large_straight(1, 3, 4, 5, 5)
-    assert 0 == Yatzy.large_straight(6, 6, 6, 6, 6)
-    assert 0 == Yatzy.large_straight(1, 2, 3, 4, 6)
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+    ((Pip.SIX, Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR), 6),
+    ((Pip.SIX, Pip.SIX, Pip.SIX, Pip.ONE, Pip.TWO), 18),
+])
+def test_sixes(dice, expected):
+    assert expected == Yatzy.sixes(*dice)
 
 
-# Full house:
-# If the dice are two of a kind and three of a kind, the
-# player scores the sum of all the dice.
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FOUR), 8),
+    ((Pip.ONE, Pip.ONE, Pip.SIX, Pip.TWO, Pip.SIX), 12),
+    ((Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.ONE), 6),
+    ((Pip.THREE, Pip.THREE, Pip.THREE, Pip.THREE, Pip.ONE), 6),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+])
+def test_pair(dice, expected):
+    assert expected == Yatzy.pair(*dice)
 
-@pytest.mark.full
-def test_full_house():
-    assert 8 == Yatzy.full_house(1, 1, 2, 2, 2)
-    assert 0 == Yatzy.full_house(2, 2, 3, 3, 4)
-    assert 0 == Yatzy.full_house(4, 4, 4, 4, 4)
-    assert 0 == Yatzy.full_house(4, 4, 4, 1, 2)
+
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.ONE, Pip.ONE, Pip.TWO, Pip.THREE, Pip.THREE), 8),
+    ((Pip.ONE, Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR), 0),
+    ((Pip.ONE, Pip.ONE, Pip.TWO, Pip.TWO, Pip.TWO), 6),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+    ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FIVE), 0),
+])
+def test_two_pairs(dice, expected):
+    assert expected == Yatzy.two_pairs(*dice)
+
+
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.THREE, Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FIVE), 9),
+    ((Pip.THREE, Pip.THREE, Pip.FOUR, Pip.FIVE, Pip.SIX), 0),
+    ((Pip.THREE, Pip.THREE, Pip.THREE, Pip.THREE, Pip.ONE), 9),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+])
+def test_three_of_a_kind(dice, expected):
+    assert expected == Yatzy.three_of_a_kind(*dice)
+
+
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.TWO, Pip.TWO, Pip.TWO, Pip.TWO, Pip.FIVE), 8),
+    ((Pip.TWO, Pip.TWO, Pip.TWO, Pip.FIVE, Pip.FIVE), 0),
+    ((Pip.TWO, Pip.TWO, Pip.TWO, Pip.TWO, Pip.TWO), 8),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+])
+def test_four_of_a_kind(dice, expected):
+    assert expected == Yatzy.four_of_a_kind(*dice)
+
+
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 15),
+    ((Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE, Pip.SIX), 0),
+    ((Pip.ONE, Pip.THREE, Pip.FOUR, Pip.FIVE, Pip.FIVE), 0),
+    ((Pip.SIX, Pip.SIX, Pip.SIX, Pip.SIX, Pip.SIX), 0),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.SIX), 0),
+])
+def test_small_straight(dice, expected):
+    assert expected == Yatzy.small_straight(*dice)
+
+
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE, Pip.SIX), 20),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.FIVE), 0),
+    ((Pip.ONE, Pip.THREE, Pip.FOUR, Pip.FIVE, Pip.FIVE), 0),
+    ((Pip.SIX, Pip.SIX, Pip.SIX, Pip.SIX, Pip.SIX), 0),
+    ((Pip.ONE, Pip.TWO, Pip.THREE, Pip.FOUR, Pip.SIX), 0),
+])
+def test_large_straight(dice, expected):
+    assert expected == Yatzy.large_straight(*dice)
+
+
+@pytest.mark.parametrize("dice,expected", [
+    ((Pip.ONE, Pip.ONE, Pip.TWO, Pip.TWO, Pip.TWO), 8),
+    ((Pip.TWO, Pip.TWO, Pip.THREE, Pip.THREE, Pip.FOUR), 0),
+    ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.FOUR), 0),
+    ((Pip.FOUR, Pip.FOUR, Pip.FOUR, Pip.ONE, Pip.TWO), 0),
+])
+def test_full_house(dice, expected):
+    assert expected == Yatzy.full_house(*dice)
