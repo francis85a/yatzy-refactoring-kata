@@ -35,11 +35,8 @@ class Pips(Enum):
     @classmethod
     def get_counts(cls, dice):
         """Devuelve una lista con la frecuencia de cada cara (1-6)."""
-        counts = [0] * cls.SIX.value
-        for pip in dice:
-            counts[pip - 1] += 1
-        return counts
-
+        return [dice.count(face_value) for face_value in cls.values()]
+    
     @classmethod
     def find_n_of_a_kind(cls, dice, n):
         """
