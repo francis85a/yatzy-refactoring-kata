@@ -35,9 +35,9 @@ class Pips(Enum):
     @classmethod
     def get_counts(cls, dice):
         """Devuelve una lista con la frecuencia de cada cara (1-6)."""
-        counts = [0] * 6
-        for die in dice:
-            counts[die - 1] += 1
+        counts = [0] * cls.SIX.value
+        for pip in dice:
+            counts[pip - 1] += 1
         return counts
 
     @classmethod
