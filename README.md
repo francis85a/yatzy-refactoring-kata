@@ -177,5 +177,6 @@ Función extraída para reutilización en `pair()`, `three_of_a_kind()` y `four_
 | **Mysterious Names** | Variables confusas | Renombrado: `tallies`→`sorted_dice`, `n`→`pairs_count` |
 | **Loops** | Complejidad innecesaria | Simplificación con funciones auxiliares |
 | **Dead Code** | Asignaciones no usadas | Eliminación |
+| **Instance State (uso de `self`)** | Apariencias de clases de instancia | Eliminación de `self` y conversión a funciones estáticas o de clase |
 
 
