@@ -70,33 +70,45 @@ if __name__ == "__main__":
     # Si importas Pips desde otro archivo, este bloque se ignora.
     # Está aquí para probar que los enum y los métodos funcionan
 
-    # Muestra la lista de todos los miembros del Enum Pips
-    # print(list(Pips)) 
-    
-    # Busca y muestra el miembro que tiene el valor indicado
-    # print(Pips(1)) 
-    
-    # Busca y muestra el miembro que tiene el nombre (key) indicado
-    # print(Pips['ONE']) 
-    
-    # Acceso directo al indicado (1)
-    # print(Pips.ONE) 
-    
-    # Imprime solo el nombre del INDICADO (1)
-    # print(Pips.ONE.name) 
-    
-    # Imprime solo el valor numérico del indicado (1)
-    # print(Pips.ONE.value) 
-    
-    # Recorre todos los miembros del Enum e imprime sus valores
+    # print(list(Pips))
+    # → [<Pips.ONE: 1>, <Pips.TWO: 2>, <Pips.THREE: 3>, <Pips.FOUR: 4>, <Pips.FIVE: 5>, <Pips.SIX: 6>]
+    # Lista de todos los miembros del enum, en orden de definición.
+    # Cada elemento es una instancia de Pips (no un int ni un str).
+
+    # print(Pips(1))
+    # → Pips.ONE
+    # Accede al miembro cuyo valor asociado (value) es 1.
+
+    # print(Pips['ONE'])
+    # → Pips.ONE
+    # Accede al miembro por su nombre (clave del enum), usando string.
+
+    # print(Pips.ONE)
+    # → Pips.ONE
+    # Accede directamente al miembro definido en la clase.
+
+    # print(Pips.ONE.name)
+    # → 'ONE'
+    # Devuelve el nombre textual del miembro.
+
+    # print(Pips.ONE.value)
+    # → 1
+    # Devuelve el valor numérico asociado al miembro.
+
     # for number in Pips.__members__.values():
     # print(number._value_)
+    # → 1  2  3  4  5  6
+    # __members__ es un diccionario {nombre: miembro}.
+    # Se itera por sus valores y se imprime el atributo interno _value_ (igual que .value).
 
-    # Llama al método que devuelve una lista con solo los valores [1, 2, 3, 4, 5, 6]
-    # print(Pips.values()) 
-    
-    # Llama al método que devuelve la lista pero al revés [6, 5, 4, 3, 2, 1]
-    # print(Pips.reversedValues()) 
-    
-    # Llama al método que devuelve una lista con todos los valores menos el que indicas (5 en este caso)
+    # print(Pips.values())
+    # → [1, 2, 3, 4, 5, 6]
+    # Devuelve los valores numéricos de cada cara del dado.
+
+    # print(Pips.reversedValues())
+    # → [6, 5, 4, 3, 2, 1]
+    # Igual que el anterior, pero inverso.
+
     # print(Pips.minus(Pips.FIVE))
+    # → 1  (si 6 - 5 = 1)
+    # Devuelve todas las caras excepto la que indicas.
