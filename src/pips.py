@@ -68,6 +68,7 @@ if __name__ == "__main__":
     # Se encarga de que el código dentro del bloque solo se ejecute 
     # cuando lanzas el archivo directamente (python pips.py). 
     # Si importas Pips desde otro archivo, este bloque se ignora.
+    # Está aquí para probar que los enum y los métodos funcionan
 
     # Muestra la lista de todos los miembros del Enum Pips
     # print(list(Pips)) 
