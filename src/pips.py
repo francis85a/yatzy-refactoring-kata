@@ -64,3 +64,38 @@ if __name__ == "__main__":
     print(Pips.values())
     print(Pips.reversedValues())
     print(Pips.minus(Pips.FIVE))
+
+    # Se encarga de que el código dentro del bloque solo se ejecute 
+    # cuando lanzas el archivo directamente (python pips.py). 
+    # Si importas Pips desde otro archivo, este bloque se ignora.
+
+    # Muestra la lista de todos los miembros del Enum Pips
+    # print(list(Pips)) 
+    
+    # Busca y muestra el miembro que tiene el valor indicado
+    # print(Pips(1)) 
+    
+    # Busca y muestra el miembro que tiene el nombre (key) indicado
+    # print(Pips['ONE']) 
+    
+    # Acceso directo al indicado (1)
+    # print(Pips.ONE) 
+    
+    # Imprime solo el nombre del INDICADO (1)
+    # print(Pips.ONE.name) 
+    
+    # Imprime solo el valor numérico del indicado (1)
+    # print(Pips.ONE.value) 
+    
+    # Recorre todos los miembros del Enum e imprime sus valores
+    # for number in Pips.__members__.values():
+    # print(number._value_)
+
+    # Llama al método que devuelve una lista con solo los valores [1, 2, 3, 4, 5, 6]
+    # print(Pips.values()) 
+    
+    # Llama al método que devuelve la lista pero al revés [6, 5, 4, 3, 2, 1]
+    # print(Pips.reversedValues()) 
+    
+    # Llama al método que devuelve una lista con todos los valores menos el que indicas (5 en este caso)
+    # print(Pips.minus(Pips.FIVE))
